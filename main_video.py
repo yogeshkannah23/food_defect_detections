@@ -65,31 +65,32 @@ if uploaded_file is not None:
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
 
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
+        with st.spinner("Processing video..."):
+            while cap.isOpened():
+                ret, frame = cap.read()
+                if not ret:
+                    break
 
-            try:
-                results = model(frame)
-                result = results[0]
+                try:
+                    results = model(frame)
+                    result = results[0]
 
-                for box in result.boxes:
-                    class_id = int(box.cls.item())
-                    class_name = class_names[class_id]
-                    confidence = box.conf.item()
-                    x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
-                    color = colors[class_id]
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                    cv2.putText(frame, f"{class_name} {confidence:.2f}",
-                                (x1, y1 - 10),
-                                cv2.FONT_HERSHEY_SIMPLEX,
-                                1, color, 2)
-            except Exception as e:
-                st.warning(f"Skipping frame due to error: {e}")
-                continue
+                    for box in result.boxes:
+                        class_id = int(box.cls.item())
+                        class_name = class_names[class_id]
+                        confidence = box.conf.item()
+                        x1, y1, x2, y2 = map(int, box.xyxy[0].cpu().numpy())
+                        color = colors[class_id]
+                        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                        cv2.putText(frame, f"{class_name} {confidence:.2f}",
+                                    (x1, y1 - 10),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    1, color, 2)
+                except Exception as e:
+                    st.warning(f"Skipping frame due to error: {e}")
+                    continue
 
-            out.write(frame)
+                out.write(frame)
 
         cap.release()
         out.release()
