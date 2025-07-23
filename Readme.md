@@ -16,5 +16,5 @@ A Streamlit-based application that uses a YOLO model (ONNX format) to detect and
 ### 1. Clone the repository
 
 ```bash
-git clone 
-cd 
+git clone https://github.com/yogeshkannah23/food_defect_detections.git
+cd food_defect_detections

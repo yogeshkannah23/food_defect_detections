@@ -3,3 +3,8 @@ ultralytics
 numpy
 opencv-python
 Pillow
+fastapi
+uvicorn
+requests
+python-multipart
+python-dotenv
